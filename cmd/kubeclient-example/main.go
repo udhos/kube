@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	options := kubeclient.Options{}
+	options := kubeclient.Options{DebugLog: true}
 
 	clientset, errClient := kubeclient.New(options)
 	if errClient != nil {
