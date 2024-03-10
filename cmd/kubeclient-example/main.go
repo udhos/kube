@@ -37,5 +37,4 @@ func main() {
 		log.Printf("%d/%d: namespace=%s name=%s",
 			i, len(pods.Items), p.Namespace, p.Name)
 	}
-
 }
