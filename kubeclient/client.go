@@ -39,7 +39,7 @@ func New(options Options) (*kubernetes.Clientset, error) {
 		if errHome != nil {
 			debugf("could not get home dir: %v", errHome)
 		}
-		kubeconfig = filepath.Join(home, "/.kube/config")
+		kubeconfig = filepath.Join(home, ".kube", "config")
 	}
 
 	config, errKubeconfig := clientcmd.BuildConfigFromFlags("", kubeconfig)
