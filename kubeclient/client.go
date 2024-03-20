@@ -3,6 +3,7 @@ package kubeclient
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -29,12 +30,20 @@ func New(options Options) (*kubernetes.Clientset, error) {
 
 	debugf := func(format string, v ...any) {
 		if options.DebugLog {
-			options.Logf("DEBUG: %s: "+format, me, v)
+			options.Logf(fmt.Sprintf("DEBUG: %s: ", me)+format, v...)
 		}
 	}
 
+	//
+	// 1. Attempt env var KUBECONFIG
+	//
+
 	kubeconfig := os.Getenv("KUBECONFIG")
+	debugf("KUBECONFIG='%s'", kubeconfig)
 	if kubeconfig == "" {
+		//
+		// 2. Attempt ~/.kube/config
+		//
 		home, errHome := os.UserHomeDir()
 		if errHome != nil {
 			debugf("could not get home dir: %v", errHome)
@@ -45,7 +54,9 @@ func New(options Options) (*kubernetes.Clientset, error) {
 	config, errKubeconfig := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if errKubeconfig != nil {
 		debugf("kubeconfig: %v", errKubeconfig)
-
+		//
+		// 3. Attempt in-cluster config
+		//
 		c, errInCluster := rest.InClusterConfig()
 		if errInCluster != nil {
 			debugf("in-cluster-config: %v", errInCluster)
