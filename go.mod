@@ -1,6 +1,8 @@
 module github.com/udhos/kube
 
-go 1.24.4
+go 1.24.6
+
+toolchain go1.25.0
 
 require (
 	k8s.io/apimachinery v0.33.2
